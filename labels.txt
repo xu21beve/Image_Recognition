@@ -1,6 +1,6 @@
-0 Clear_Takeaway_Container
-1 Compostable_Cup
-2 Compostable_Cup_Granola_Holder
+0 takeaway-container
+1 compostable-cup
+2 compostable-cup
 3 Condiments_Cup
 4 Large_Paper_Tray_Waxed
 5 Small_Paper_Tray

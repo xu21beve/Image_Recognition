@@ -43,6 +43,8 @@ ADD_ONS = [['compostable-fork', 'compost', 'compostable-plastic'],
            ['napkin', 'compost, recycling', 'unwaxed-paper'],
            ['condiments-packet', 'trash', 'plastic']]
 
+identification_threshold = 0.8
+
 def load_labels(filename):
   with open(filename, 'r') as f:
     return [line.strip() for line in f.readlines()]
@@ -139,10 +141,19 @@ if __name__ == '__main__':
 
   top_k = results.argsort()[-5:][::-1]
   labels = load_labels(args.label_file)
+  object_ids = [-1]
   for i in top_k:
     if floating_model:
       print('{:08.6f}: {}'.format(float(results[i]), labels[i]))
+      if float(results[i]) > identification_threshold:  # 0.8 is the threshold for identification
+        object_ids.append(i)
     else:
       print('{:08.6f}: {}'.format(float(results[i] / 255.0), labels[i]))
+
+  for i in object_ids:
+    print(f"Object Identified: {labels[object_ids]}")    # Initial testing for bin TODO: Add logic following probability table
+    print(f"Bin: {CONTAINERS[object_ids][1]}")
+  if len(object_ids) < 1:
+    print("No object identified with greater than {identification_threshold} probability")
 
 print('time: {:.3f}ms'.format((stop_time - start_time) * 1000))
