@@ -5,7 +5,7 @@ import numpy as np
 from tflite_runtime.interpreter import Interpreter
 
 model_path = '../detect.tflite'
-img_path = '../assets/image.jpg'
+img_path = '../selfie.png'
 
 
 # Load the labels into a list
