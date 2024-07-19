@@ -24,6 +24,25 @@ from tflite_runtime.interpreter import Interpreter
 # Define a list of colors for visualization
 COLORS = np.random.randint(0, 255, size=(3, 3), dtype=np.uint8)  # len(classes) --> substitute for size because classes not initialized
 
+              # name              bin       material
+CONTAINERS = [['soup-container', 'recycle', 'plastic'],
+              ['compostable-cup', 'compost', 'compostable-plastic'],
+              ['condiments-cup', 'recycle', 'plastic'],
+              ['large-waxed-paper-tray', 'trash', 'waxed-paper'],
+              ['small-waxed-paper-tray', 'trash', 'waxed-paper'],
+              ['large-unwaxed-paper-tray', 'recycling', 'unwaxed-paper'],
+              ['tin-no-lid', 'recycling', 'metal'],
+              ['tin-with-lid', 'recycling', 'metal, aluminum'], # Can instruct to just recycle away lid
+              ['takeaway-container', 'recycling', 'plastic']]
+
+            # name              bin         material
+ADD_ONS = [['compostable-fork', 'compost', 'compostable-plastic'],
+           ['compostable-spoon', 'compost', 'compostable-plastic'],
+           ['one-use-fork', 'trash', 'plastic'],
+           ['one-use-knife', 'trash', 'plastic'],
+           ['napkin', 'compost, recycling', 'unwaxed-paper'],
+           ['condiments-packet', 'trash', 'plastic']]
+
 def load_labels(filename):
   with open(filename, 'r') as f:
     return [line.strip() for line in f.readlines()]
@@ -33,12 +52,12 @@ if __name__ == '__main__':
   parser.add_argument(
       '-i',
       '--image',
-      default='../selfie.png',
+      default='../image.jpg',
       help='image to be classified')
   parser.add_argument(
       '-m',
       '--model_file',
-      default='../detect.tflite',
+      default='../model_unquant.tflite',
       help='.tflite model to be executed')
   parser.add_argument(
       '-l',

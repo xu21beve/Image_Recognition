@@ -1,3 +1,10 @@
-0 Waterbottle
-1 Me
-2 me+waterbottle
+0 Clear_Takeaway_Container
+1 Compostable_Cup
+2 Compostable_Cup_Granola_Holder
+3 Condiments_Cup
+4 Large_Paper_Tray_Waxed
+5 Small_Paper_Tray
+6 Tin_No_Lid
+7 Tin_With_Lid
+8 Unwaxed_Tray
+9 Soup
