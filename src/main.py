@@ -141,7 +141,7 @@ if __name__ == '__main__':
 
   top_k = results.argsort()[-5:][::-1]
   labels = load_labels(args.label_file)
-  object_ids = [-1]
+  object_ids = []
   for i in top_k:
     if floating_model:
       print('{:08.6f}: {}'.format(float(results[i]), labels[i]))
@@ -151,8 +151,8 @@ if __name__ == '__main__':
       print('{:08.6f}: {}'.format(float(results[i] / 255.0), labels[i]))
 
   for i in object_ids:
-    print(f"Object Identified: {labels[object_ids]}")    # Initial testing for bin TODO: Add logic following probability table
-    print(f"Bin: {CONTAINERS[object_ids][1]}")
+    print(f"Object Identified: {labels[i]}")    # Initial testing for bin TODO: Add logic following probability table
+    print(f"Bin: {CONTAINERS[i][1]}")
   if len(object_ids) < 1:
     print("No object identified with greater than {identification_threshold} probability")
 

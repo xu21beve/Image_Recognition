@@ -12,9 +12,9 @@ fi
 
 filename=`date +%T`.jpg
 
-echo filename
-touch "Documents/Image_Recognition/assets/$filename"
-libcamera-jpeg -o "Documents/Image_Recognition/assets/$filename" -t 20 --qt-preview
+echo $filename
+touch "Documents/Image_Recognition_copy/Image_Recognition/image.jpg"
+libcamera-jpeg -o "Documents/Image_Recognition_copy/Image_Recognition/image.jpg" -t 20 --qt-preview
 
 #cleanup
 
