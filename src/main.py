@@ -16,6 +16,7 @@
 
 import argparse
 import time
+import hx711
 
 import numpy as np
 from PIL import Image
@@ -24,26 +25,29 @@ from tflite_runtime.interpreter import Interpreter
 # Define a list of colors for visualization
 COLORS = np.random.randint(0, 255, size=(3, 3), dtype=np.uint8)  # len(classes) --> substitute for size because classes not initialized
 
-              # name              bin       material
-CONTAINERS = [['soup-container', 'recycle', 'plastic'],
-              ['compostable-cup', 'compost', 'compostable-plastic'],
-              ['condiments-cup', 'recycle', 'plastic'],
-              ['large-waxed-paper-tray', 'trash', 'waxed-paper'],
-              ['small-waxed-paper-tray', 'trash', 'waxed-paper'],
-              ['large-unwaxed-paper-tray', 'recycling', 'unwaxed-paper'],
-              ['tin-no-lid', 'recycling', 'metal'],
-              ['tin-with-lid', 'recycling', 'metal, aluminum'], # Can instruct to just recycle away lid
-              ['takeaway-container', 'recycling', 'plastic']]
+              # name              bin       material   weight
+CONTAINERS = [['soup-container', 'recycle', 'plastic', '-1'],
+              ['compostable-cup', 'compost', 'compostable-plastic', '-1'],
+              ['condiments-cup', 'recycle', 'plastic', '-1'],
+              ['large-waxed-paper-tray', 'trash', 'waxed-paper', '-1'],
+              ['small-waxed-paper-tray', 'trash', 'waxed-paper', '-1'],
+              ['large-unwaxed-paper-tray', 'recycling', 'unwaxed-paper', '-1'],
+              ['tin-no-lid', 'recycling', 'metal', '-1'],
+              ['tin-with-lid', 'recycling', 'metal, aluminum', '-1'], # Can instruct to just recycle away lid
+              ['takeaway-container', 'recycling', 'plastic', '-1']]
 
-            # name              bin         material
-ADD_ONS = [['compostable-fork', 'compost', 'compostable-plastic'],
-           ['compostable-spoon', 'compost', 'compostable-plastic'],
-           ['one-use-fork', 'trash', 'plastic'],
-           ['one-use-knife', 'trash', 'plastic'],
-           ['napkin', 'compost, recycling', 'unwaxed-paper'],
-           ['condiments-packet', 'trash', 'plastic']]
+            # name              bin         material             weight
+ADD_ONS = [['compostable-fork', 'compost', 'compostable-plastic', '-1'],
+           ['compostable-spoon', 'compost', 'compostable-plastic', '-1'],
+           ['one-use-fork', 'trash', 'plastic', '-1'],
+           ['one-use-knife', 'trash', 'plastic', '-1'],
+           ['napkin', 'compost, recycling', 'unwaxed-paper', '-1'],
+           ['condiments-packet', 'trash', 'plastic', '-1']]
 
-identification_threshold = 0.8
+significant_weight_deviation = 20 # in grams
+identification_threshold = 0.8 # probability
+
+weigh = hx711(5, 6) # change to actual pins
 
 def load_labels(filename):
   with open(filename, 'r') as f:
@@ -54,7 +58,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '-i',
       '--image',
-      default='../image.jpg',
+      default='../06:31:44.jpg',
       help='image to be classified')
   parser.add_argument(
       '-m',
@@ -142,11 +146,15 @@ if __name__ == '__main__':
   top_k = results.argsort()[-5:][::-1]
   labels = load_labels(args.label_file)
   object_ids = []
+  highest_probability_id = -1
+
   for i in top_k:
     if floating_model:
       print('{:08.6f}: {}'.format(float(results[i]), labels[i]))
       if float(results[i]) > identification_threshold:  # 0.8 is the threshold for identification
         object_ids.append(i)
+        if results[i] > results[highest_probability_id]:    # Choose item with the highest probability amongst the items with the five highest probabilities
+            highest_probability_id = i 
     else:
       print('{:08.6f}: {}'.format(float(results[i] / 255.0), labels[i]))
 
@@ -155,5 +163,33 @@ if __name__ == '__main__':
     print(f"Bin: {CONTAINERS[i][1]}")
   if len(object_ids) < 1:
     print("No object identified with greater than {identification_threshold} probability")
+    print("Trash")
+
+  # Start processing for most likely container
+  if CONTAINERS[highest_probability_id][1] == "compost":
+    # function to look for wrappers/cutlery
+        # if identified, instruct dispoal of wrappers/cutlery, then
+    # return "compost"
+    print("Compost")
+  else:
+    # Look for wrappers/cutlery -- don't have access to these right now, so for now, just add an informational page about the different utensils
+    # if identified, instruct dispoal of wrappers/cutlery, then
+    wrappers_cutlery = []
+    weight = CONTAINERS[highest_probability_id][3] + sum(wrappers_cutlery)  # total weight
+
+    if weigh.rawBytesToWeight(weigh.getRawBytes()) > significant_weight_deviation: # calculate using oil? bc less dense than water
+    # If weight deviation (including any wrappers/cutlery) is significant there is food
+        if CONTAINERS[highest_probability_id][2] == "soup-container":
+            print("Dump remaining contents (food, napkins, and compostable utensils) into compost. Then recycle container")
+        # if not soup container
+            if CONTAINERS[highest_probability_id][2] == "unwaxed-paper":
+                print("Compost")
+            else:
+                if CONTAINERS[highest_probability_id][0] == "tin-with-lid":
+                    print("Recycle plastic lid")
+                print("Dump the food, and then throw in trash.")
+    else: # if weight deviation (including any wrappers/cutlery) is not significant there is no food
+        print("Recycle")
+            
 
 print('time: {:.3f}ms'.format((stop_time - start_time) * 1000))

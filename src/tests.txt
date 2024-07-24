@@ -1,0 +1,253 @@
+Compostable Cup ---------------------------------------------------------------
+
+0.998897: 1 compostable-cup
+0.000813: 6 Tin_No_Lid
+0.000162: 9 Soup
+0.000087: 4 Large_Paper_Tray_Waxed
+0.000011: 5 Small_Paper_Tray
+Object Identified: 1 compostable-cup
+Bin: compost
+Compost
+time: 3.287ms
+0.848912: 1 compostable-cup
+0.134990: 9 Soup
+0.011400: 6 Tin_No_Lid
+0.002453: 4 Large_Paper_Tray_Waxed
+0.001316: 3 Condiments_Cup
+Object Identified: 1 compostable-cup
+Bin: compost
+Compost
+time: 6.019ms
+0.593437: 1 compostable-cup
+0.306740: 9 Soup
+0.040917: 3 Condiments_Cup
+0.021379: 6 Tin_No_Lid
+0.015190: 0 takeaway-container
+No object identified with greater than {identification_threshold} probability
+Trash
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 3.264ms
+0.985269: 1 compostable-cup
+0.008497: 9 Soup
+0.003103: 4 Large_Paper_Tray_Waxed
+0.001528: 6 Tin_No_Lid
+0.001495: 0 takeaway-container
+Object Identified: 1 compostable-cup
+Bin: compost
+Compost
+time: 3.278ms
+
+Condiments Cup ---------------------------------------------------------------
+0.422216: 1 compostable-cup
+0.234237: 3 Condiments_Cup
+0.206886: 9 Soup
+0.123685: 4 Large_Paper_Tray_Waxed
+0.006013: 6 Tin_No_Lid
+No object identified with greater than {identification_threshold} probability
+Trash
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 8.924ms
+0.757119: 9 Soup
+0.177107: 1 compostable-cup
+0.034494: 4 Large_Paper_Tray_Waxed
+0.012067: 2 compostable-cup
+0.007123: 8 Unwaxed_Tray
+No object identified with greater than {identification_threshold} probability
+Trash
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 3.554ms
+
+Takeaway Container -----------------------------------------------------
+0.937791: 0 takeaway-container
+0.038196: 7 Tin_With_Lid
+0.015963: 1 compostable-cup
+0.003422: 4 Large_Paper_Tray_Waxed
+0.001605: 9 Soup
+Object Identified: 0 takeaway-container
+Bin: recycle
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 5.192ms
+
+0.983116: 0 takeaway-container
+0.011787: 6 Tin_No_Lid
+0.001816: 4 Large_Paper_Tray_Waxed
+0.001330: 9 Soup
+0.001240: 1 compostable-cup
+Object Identified: 0 takeaway-container
+Bin: recycle
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 6.121ms
+
+0.842345: 0 takeaway-container
+0.118089: 1 compostable-cup
+0.031788: 4 Large_Paper_Tray_Waxed
+0.005897: 6 Tin_No_Lid
+0.001591: 7 Tin_With_Lid
+Object Identified: 0 takeaway-container
+Bin: recycle
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 6.030ms
+
+0.450661: 0 takeaway-container
+0.379189: 6 Tin_No_Lid
+0.108049: 1 compostable-cup
+0.058595: 4 Large_Paper_Tray_Waxed
+0.002005: 9 Soup
+No object identified with greater than {identification_threshold} probability
+Trash
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 6.433ms
+
+Small Paper Tray -----------------------------------------------------------------------
+0.606961: 5 Small_Paper_Tray
+0.214098: 4 Large_Paper_Tray_Waxed
+0.164490: 8 Unwaxed_Tray
+0.013658: 1 compostable-cup
+0.000290: 6 Tin_No_Lid
+No object identified with greater than {identification_threshold} probability
+Trash
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 3.714ms
+
+0.733421: 5 Small_Paper_Tray
+0.225258: 8 Unwaxed_Tray
+0.020069: 4 Large_Paper_Tray_Waxed
+0.010008: 7 Tin_With_Lid
+0.005804: 1 compostable-cup
+No object identified with greater than {identification_threshold} probability
+Trash
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 3.541ms
+
+Soup ------------------------------------
+0.983972: 9 Soup
+0.015307: 1 compostable-cup
+0.000344: 3 Condiments_Cup
+0.000163: 7 Tin_With_Lid
+0.000079: 4 Large_Paper_Tray_Waxed
+Object Identified: 9 Soup 
+
+TODO: Fix this bug:
+
+Traceback (most recent call last):
+  File "/home/beverlyxu/Image_Recognition/Image_Recognition/src/./main.py", line 159, in <module>
+    print(f"Bin: {CONTAINERS[i][1]}")
+IndexError: list index out of range
+
+
+0.954078: 9 Soup
+0.013860: 4 Large_Paper_Tray_Waxed
+0.012954: 1 compostable-cup
+0.012679: 8 Unwaxed_Tray
+0.003654: 0 takeaway-container
+Object Identified: 9 Soup
+
+No Lid Tray ----------------------------------
+
+0.999382: 6 Tin_No_Lid
+0.000594: 1 compostable-cup
+0.000015: 7 Tin_With_Lid
+0.000007: 4 Large_Paper_Tray_Waxed
+0.000001: 0 takeaway-container
+Object Identified: 6 Tin_No_Lid
+Bin: recycling
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 3.444ms
+
+Tin with Lid ----------------------------------
+0.996673: 7 Tin_With_Lid
+0.001566: 6 Tin_No_Lid
+0.001249: 1 compostable-cup
+0.000320: 0 takeaway-container
+0.000151: 4 Large_Paper_Tray_Waxed
+Object Identified: 7 Tin_With_Lid
+Bin: recycling
+Recycle plastic lid
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 3.637ms
+
+
+0.968069: 7 Tin_With_Lid
+0.017563: 6 Tin_No_Lid
+0.004840: 0 takeaway-container
+0.004768: 4 Large_Paper_Tray_Waxed
+0.003043: 1 compostable-cup
+Object Identified: 7 Tin_With_Lid
+Bin: recycling
+Recycle plastic lid
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 3.878ms
+
+Unwaxed Paper Tray ------------------------------------------------
+0.924346: 4 Large_Paper_Tray_Waxed
+0.049032: 5 Small_Paper_Tray
+0.019868: 8 Unwaxed_Tray
+0.005158: 1 compostable-cup
+0.000715: 7 Tin_With_Lid
+Object Identified: 4 Large_Paper_Tray_Waxed
+Bin: trash
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 3.838ms
+
+0.998094: 8 Unwaxed_Tray
+0.001507: 4 Large_Paper_Tray_Waxed
+0.000214: 5 Small_Paper_Tray
+0.000114: 1 compostable-cup
+0.000029: 9 Soup
+Object Identified: 8 Unwaxed_Tray
+Bin: recycling
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 3.510ms
+
+Waxed Paper Tray ----------------------------------------------
+0.988384: 4 Large_Paper_Tray_Waxed
+0.006152: 5 Small_Paper_Tray
+0.002901: 9 Soup
+0.001443: 8 Unwaxed_Tray
+0.000401: 7 Tin_With_Lid
+Object Identified: 4 Large_Paper_Tray_Waxed
+Bin: trash
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 3.616ms
+
+0.697223: 4 Large_Paper_Tray_Waxed
+0.176995: 8 Unwaxed_Tray
+0.077021: 1 compostable-cup
+0.027900: 9 Soup
+0.010726: 5 Small_Paper_Tray
+No object identified with greater than {identification_threshold} probability
+Trash
+Trash
+Dump food, napkins, and compostable utensils out into the compost
+Recycle
+time: 3.307ms
