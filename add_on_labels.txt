@@ -1,0 +1,5 @@
+0 mayo
+1 mustard
+2 chili
+3 compostable-fork
+4 plastic-fork
