@@ -21,33 +21,36 @@ import hx711
 import numpy as np
 from PIL import Image
 from tflite_runtime.interpreter import Interpreter
+from weight import totalWeight
 
 # Define a list of colors for visualization
 COLORS = np.random.randint(0, 255, size=(3, 3), dtype=np.uint8)  # len(classes) --> substitute for size because classes not initialized
 
               # name              bin       material   weight
-CONTAINERS = [['soup-container', 'recycle', 'plastic', '-1'],
-              ['compostable-cup', 'compost', 'compostable-plastic', '-1'],
-              ['condiments-cup', 'recycle', 'plastic', '-1'],
-              ['large-waxed-paper-tray', 'trash', 'waxed-paper', '-1'],
-              ['small-waxed-paper-tray', 'trash', 'waxed-paper', '-1'],
-              ['large-unwaxed-paper-tray', 'recycling', 'unwaxed-paper', '-1'],
-              ['tin-no-lid', 'recycling', 'metal', '-1'],
-              ['tin-with-lid', 'recycling', 'metal, aluminum', '-1'], # Can instruct to just recycle away lid
-              ['takeaway-container', 'recycling', 'plastic', '-1']]
+CONTAINERS = [['soup-container', 'recycle', 'plastic', '28.65'],
+              ['compostable-cup', 'compost', 'compostable-plastic', '8.6'],
+              ['condiments-cup', 'recycle', 'plastic', '4'],
+              ['large-waxed-paper-tray', 'trash', 'waxed-paper', '14.2'],
+              ['small-waxed-paper-tray', 'trash', 'waxed-paper', '6'],
+              ['large-unwaxed-paper-tray', 'recycling', 'unwaxed-paper', '10.65'],
+              ['tin-no-lid', 'recycling', 'metal', '7.15'],
+              ['tin-with-lid', 'recycling', 'metal, aluminum', '11.5'], # Can instruct to just recycle away lid
+              ['takeaway-container', 'recycling', 'plastic', '14.7']]
 
             # name              bin         material             weight
-ADD_ONS = [['compostable-fork', 'compost', 'compostable-plastic', '-1'],
-           ['compostable-spoon', 'compost', 'compostable-plastic', '-1'],
+ADD_ONS = [['compostable-fork', 'compost', 'compostable-plastic', '5.25'],
+           # ['compostable-spoon', 'compost', 'compostable-plastic', '-1'],
            ['one-use-fork', 'trash', 'plastic', '-1'],
-           ['one-use-knife', 'trash', 'plastic', '-1'],
-           ['napkin', 'compost, recycling', 'unwaxed-paper', '-1'],
-           ['condiments-packet', 'trash', 'plastic', '-1']]
+           # ['one-use-knife', 'trash', 'plastic', '-1'],
+           # ['napkin', 'compost, recycling', 'unwaxed-paper', '-1'],
+           ['mayo', 'trash', 'plastic', '13.2'],
+           ['mustard', 'trash', 'plastic', '6.1'],
+           ['chili', 'trash', 'plastic', '7.7']]
 
 significant_weight_deviation = 20 # in grams
 identification_threshold = 0.8 # probability
 
-weigh = hx711(5, 6) # change to actual pins
+# weigh = hx711(5, 6) # change to actual pins
 
 def load_labels(filename):
   with open(filename, 'r') as f:
@@ -58,7 +61,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '-i',
       '--image',
-      default='../06:31:44.jpg',
+      default='../temp.jpg',
       help='image to be classified')
   parser.add_argument(
       '-m',
@@ -177,7 +180,7 @@ if __name__ == '__main__':
     wrappers_cutlery = []
     weight = CONTAINERS[highest_probability_id][3] + sum(wrappers_cutlery)  # total weight
 
-    if weigh.rawBytesToWeight(weigh.getRawBytes()) > significant_weight_deviation: # calculate using oil? bc less dense than water
+    if totalWeight() - weight > significant_weight_deviation: # calculate using oil? bc less dense than water
     # If weight deviation (including any wrappers/cutlery) is significant there is food
         if CONTAINERS[highest_probability_id][2] == "soup-container":
             print("Dump remaining contents (food, napkins, and compostable utensils) into compost. Then recycle container")
