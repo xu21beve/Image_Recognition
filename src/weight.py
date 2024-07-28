@@ -26,6 +26,8 @@ else:
 
 leftHx = HX711(17, 27)
 rightHx = HX711(23, 22)
+leftWeight = 0
+rightWeight = 0
 
 def printRawBytes(rawBytes):
     print(f"[RAW BYTES] {rawBytes}")
@@ -40,20 +42,17 @@ def printWeight(rawBytes, hx):
     print(f"[WEIGHT] {hx.rawBytesToWeight(rawBytes)} gr")
 
 def printAllLeft(rawBytes):
-    longValue = leftHx.rawBytesToLong(rawBytes)
-    longWithOffsetValue = leftHx.rawBytesToLongWithOffset(rawBytes)
-    weightValue = leftHx.rawBytesToWeight(rawBytes)
-#   print(f"[INFO] LEFT INTERRUPT_BASED | longValue: {longValue} | longWithOffsetValue: {longWithOffsetValue} | weight (grams): {weightValue}")
+    # longValue = leftHx.rawBytesToLong(rawBytes)
+    # longWithOffsetValue = leftHx.rawBytesToLongWithOffset(rawBytes)
+    # weightValue = leftHx.rawBytesToWeight(rawBytes)
+    # print(f"[INFO] LEFT INTERRUPT_BASED | longValue: {longValue} | longWithOffsetValue: {longWithOffsetValue} | weight (grams): {weightValue}")
+    leftWeight = leftHx.rawBytesToWeight(rawBytes)
     
 def printAllRight(rawBytes):
-    rightLongValue = rightHx.rawBytesToLong(rawBytes)
-    rightLongWithOffsetValue = rightHx.rawBytesToLongWithOffset(rawBytes)
-    rightWeightValue = rightHx.rawBytesToWeight(rawBytes)
-    leftLongValue = rightHx.rawBytesToLong(rawBytes)
-    leftLongWithOffsetValue = rightHx.rawBytesToLongWithOffset(rawBytes)
-    leftWeightValue = rightHx.rawBytesToWeight(rawBytes)
-    print(f" weight (grams): {rightWeightValue + leftWeightValue}")
-#   print(f"[INFO] RIGHT INTERRUPT_BASED | longValue: {longValue} | longWithOffsetValue: {longWithOffsetValue} | weight (grams): {weightValue}")
+    # rightWeightValue = rightHx.rawBytesToWeight(rawBytes)
+    # print(f"[INFO] RIGHT INTERRUPT_BASED | longValue: {rightLongValue} | longWithOffsetValue: {rightLongWithOffsetValue} | weight (grams): {rightWeightValue}")
+    rightWeight = rightHx.rawBytesToWeight(rawBytes)
+
 
 def getRawBytesAndPrintAll(hx):
     rawBytes = hx.getRawBytes()
@@ -80,12 +79,13 @@ rightHx.setReadingFormat("MSB", "MSB")
 
 print("[INFO] Automatically setting the offset.")
 leftHx.autosetOffset()
+
 leftOffsetValue = leftHx.getOffset()
 
 rightHx.autosetOffset()
 rightOffsetValue = rightHx.getOffset()
 print(f"[INFO] Finished automatically setting the left offset. The new value is '{leftOffsetValue}'.")
-print(f"[INFO] Finished automatically setting the left offset. The new value is '{rightOffsetValue}'.")
+print(f"[INFO] Finished automatically setting the right offset. The new value is '{rightOffsetValue}'.")
 
 
 print("[INFO] You can add weight now!")
@@ -104,8 +104,8 @@ In my case, the longValueWithOffset was around 114000 so my reference unit is 11
 because if I used the 114000, I'd be getting milligrams instead of grams.
 '''
 
-leftReferenceUnit = 54200 / 384.4544
-rightReferenceUnit = 66650 / 428.9567
+leftReferenceUnit = (204500 + 180000) / 495.43
+rightReferenceUnit = (204500 + 180000) / 495.43
 
 print(f"[INFO] Setting the 'leftReferenceUnit' at {leftReferenceUnit}.")
 leftHx.setReferenceUnit(leftReferenceUnit)
@@ -118,12 +118,14 @@ print(f"[INFO] Finished setting the 'rightReferenceUnit' at {rightReferenceUnit}
 
 if READ_MODE == READ_MODE_INTERRUPT_BASED:
     print("[INFO] Enabling the callback.")
-    leftHx.enableReadyCallback(printAllLeft)
-    rightHx.enableReadyCallback(printAllRight)
+    leftHx.enableReadyCallback()
+    rightHx.enableReadyCallback()
     print("[INFO] Finished enabling the callback.")
 
 
 while True:
+    print(f"weight (grams): {leftHx.rawBytesToWeight(leftHx.readRawBytes()) + rightHx.rawBytesToWeight(rightHx.readRawBytes())}	left: {leftHx.rawBytesToWeight(leftHx.readRawBytes())}  right: {rightHx.rawBytesToWeight(rightHx.readRawBytes())}")
+    
     try:
         if READ_MODE == READ_MODE_POLLING_BASED:
             getRawBytesAndPrintAll()
