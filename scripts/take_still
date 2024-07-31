@@ -3,19 +3,23 @@
 #shopt -s -o nounset
 
 #sanity checks
-if test -z "$BASH"; then
-	printf "$take_still:$LINENO: not in bash!" >%2
-	exit 001
-fi
+#if test -z "$BASH"; then
+#	printf "$take_still:$LINENO: not in bash!" >%2
+#	exit 001
+#fi
 
 #main code
 
 filename=`date +%T`.jpg
 
-echo $filename
-touch "Documents/Image_Recognition_copy/Image_Recognition/$filename"
-libcamera-jpeg -o "Documents/Image_Recognition_copy/Image_Recognition/$filename" -t 20 --qt-preview
-
+# echo $filename
+while [ 1 == 1 ]
+do
+	filename=`date +%T`.jpg
+	echo $filename
+	touch "Documents/Image_Recognition_copy/Image_Recognition/$filename"
+	libcamera-jpeg -o "Documents/Image_Recognition_copy/Image_Recognition/$filename" -t 1 --qt-preview
+done
 #cleanup
 
 

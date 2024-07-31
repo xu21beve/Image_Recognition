@@ -17,6 +17,7 @@
 import argparse
 import time
 import hx711
+import sys
 
 import numpy as np
 from PIL import Image
@@ -53,7 +54,7 @@ ADD_ONS = [['mayo', 'trash', 'plastic', 13.2],
            # ]
 
 significant_weight_deviation = 20 # in grams
-identification_threshold = 0.8 # probability
+identification_threshold = 0.5 # probability
 
 # weigh = hx711(5, 6) # change to actual pins
 
@@ -66,7 +67,7 @@ if __name__ == '__main__':
   parser.add_argument(
       '-i',
       '--image',
-      default='../06:04:39.jpg',
+      default='../23:42:57.jpg',
       help='image to be classified')
   parser.add_argument(
       '-m',
@@ -174,10 +175,9 @@ if __name__ == '__main__':
     print(f"Object Identified: {labels[i]}")    # Initial testing for bin TODO: Add logic following probability table
     print(f"Bin: {CONTAINERS[i][1]}")
   if len(object_ids) < 1:
-    print("No object identified with greater than {identification_threshold} probability")
-    print("Trash")
+    print(f"No object identified with greater than {identification_threshold} probability")
     
-  wrappers_cutlery = identify_utensils()
+  wrappers_cutlery = identify_utensils(args.image)
   weight = CONTAINERS[highest_probability_id][3]  # total weight
   for i in wrappers_cutlery:
     weight += ADD_ONS[i][3]
@@ -196,8 +196,12 @@ if __name__ == '__main__':
     # Look for wrappers/cutlery -- don't have access to these right now, so for now, just add an informational page about the different utensils
     # if identified, instruct dispoal of wrappers/cutlery, then
     for i in wrappers_cutlery:
-      print(f"Throw {ADD_ONS[i][0]} into {ADD_ONS[i][1]}")
-
+      if ADD_ONS[i][1] != CONTAINERS[highest_probability_id][1] or not (highest_probability_id == -1 and ADD_ONS[i][1] == "trash"):
+        print(f"Throw {ADD_ONS[i][0]} into {ADD_ONS[i][1]}")
+    if highest_probability_id == -1:
+      print("Throw the rest in the trash")
+      sys.exit(0)
+      
     if totalWeight() - weight > significant_weight_deviation: # calculate using oil? bc less dense than water
     # If weight deviation (including any wrappers/cutlery) is significant there is food
       if CONTAINERS[highest_probability_id][2] == "soup-container":
@@ -208,9 +212,11 @@ if __name__ == '__main__':
       else:
         if CONTAINERS[highest_probability_id][0] == "tin-with-lid":
           print("Recycle plastic lid")
-      print(f"Dump the food into compost, and then throw {CONTAINERS[highest_probability_id][0]} in trash.")
-    else: # if weight deviation (including any wrappers/cutlery) is not significant there is no food
+        print(f"Dump the food into compost, and then throw {CONTAINERS[highest_probability_id][0]} in trash.")
+    elif CONTAINERS[highest_probability_id][1] == "recycling": # if weight deviation (including any wrappers/cutlery) is not significant there is no food
         print("Recycle")
+    else:
+      print("Throw all remaining into trash.")
             
 print(f"{totalWeight()}")
 print('time: {:.3f}ms'.format((stop_time - start_time) * 1000))

@@ -47,8 +47,8 @@ def load_labels(filename):
   with open(filename, 'r') as f:
     return [line.strip() for line in f.readlines()]
 
-def identify_utensils():
-  image_file = '../06:04:39.jpg'
+def identify_utensils(image_path):
+  image_file = image_path
   model_file = '../add_on_model_unquant.tflite'
   label_file = '../add_on_labels.txt'
   input_mean = 127.5
