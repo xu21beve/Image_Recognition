@@ -41,4 +41,5 @@ print(f"[INFO] Finished setting the 'rightReferenceUnit' at {rightReferenceUnit}
 print("[INFO] Enabling the callback.")
 leftHx.enableReadyCallback()
 rightHx.enableReadyCallback()
+print(f"{totalWeight()}")
 print("[INFO] Finished enabling the callback.")
