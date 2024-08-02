@@ -15,7 +15,8 @@ filename=`date +%T`.jpg
 # echo $filename
 while [ 1 == 1 ]
 do
-	filename=`date +%T`.jpg
+	# filename=`date +%T`.jpg
+	filename=image.jpg
 	echo $filename
 	touch "Documents/Image_Recognition_copy/Image_Recognition/$filename"
 	libcamera-jpeg -o "Documents/Image_Recognition_copy/Image_Recognition/$filename" -t 1 --qt-preview

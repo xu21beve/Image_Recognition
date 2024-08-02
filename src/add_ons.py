@@ -41,7 +41,7 @@ ADD_ONS = [['mayo', 'trash', 'plastic', 13.2],
 #            ['condiments-packet', 'trash', 'plastic', '-1']]
 
 significant_weight_deviation = 20 # in grams
-identification_threshold = 0.8 # probability
+identification_threshold = 0.3 # probability
 
 def load_labels(filename):
   with open(filename, 'r') as f:
@@ -49,8 +49,8 @@ def load_labels(filename):
 
 def identify_utensils(image_path):
   image_file = image_path
-  model_file = '../add_on_model_unquant.tflite'
-  label_file = '../add_on_labels.txt'
+  model_file = '../utensils_model.tflite'
+  label_file = '../utensils_labels.txt'
   input_mean = 127.5
   input_std = 127.5
   num_threads = None

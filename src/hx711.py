@@ -16,6 +16,7 @@ class HX711:
         self.readLock = threading.Lock()
         
         GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
         GPIO.setup(self.PD_SCK, GPIO.OUT)
         GPIO.setup(self.DOUT, GPIO.IN)
 

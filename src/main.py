@@ -25,25 +25,23 @@ from tflite_runtime.interpreter import Interpreter
 from weight import totalWeight
 from add_ons import identify_utensils
 
-print("after weightA?")
 
 # Define a list of colors for visualization
 COLORS = np.random.randint(0, 255, size=(3, 3), dtype=np.uint8)  # len(classes) --> substitute for size because classes not initialized
 
               # name              bin       material   weight
-CONTAINERS = [['takeaway-container', 'recycling', 'plastic', 14.7],
-              ['compostable-cup', 'compost', 'compostable-plastic', 8.6],
-              ['compostable-cup', 'compost', 'compostable-plastic', 8.6],
+CONTAINERS = [['compostable-cup', 'compost', 'compostable-plastic', 8.6],
               ['condiments-cup', 'recycle', 'plastic', 4],
-              ['large-waxed-paper-tray', 'trash', 'waxed-paper', 14.2],
               ['small-waxed-paper-tray', 'trash', 'waxed-paper', 6],
+              ['soup-container', 'recycle', 'plastic', 28.65],
+              ['takeaway-container', 'recycling', 'plastic', 14.7],
               ['tin-no-lid', 'recycling', 'metal', 7.15],
               ['tin-with-lid', 'recycling', 'metal, aluminum', 11.5], # Can instruct to just recycle away lid
-              ['large-unwaxed-paper-tray', 'recycling', 'unwaxed-paper', 10.65],
-              ['soup-container', 'recycle', 'plastic', 28.65]]
+              ['large-waxed-paper-tray', 'trash', 'waxed-paper', 14.2],
+              ['large-unwaxed-paper-tray', 'recycling', 'unwaxed-paper', 10.65]]
 
             # name              bin         material             weight
-ADD_ONS = [['mayo', 'trash', 'plastic', 13.2],
+ADD_ONS = [# ['mayo', 'trash', 'plastic', 13.2],
            ['mustard', 'trash', 'plastic', 6.1],
            ['chili', 'trash', 'plastic', 7.7],
            ['compostable-fork', 'compost', 'compostable-plastic', 5.25],
@@ -67,17 +65,17 @@ if __name__ == '__main__':
   parser.add_argument(
       '-i',
       '--image',
-      default='../23:42:57.jpg',
+      default='../image.jpg',
       help='image to be classified')
   parser.add_argument(
       '-m',
       '--model_file',
-      default='../model_unquant.tflite',
+      default='../containers_model.tflite',
       help='.tflite model to be executed')
   parser.add_argument(
       '-l',
       '--label_file',
-      default='../labels.txt',
+      default='../containers_labels.txt',
       help='name of file containing labels')
   parser.add_argument(
       '--input_mean',
@@ -159,7 +157,7 @@ if __name__ == '__main__':
   
   for i in range(20):
     print(f"[wait time]: {i*5}%")
-    time.sleep(1)
+    time.sleep(0.2)
 
   for i in top_k:
     if floating_model:
@@ -195,9 +193,15 @@ if __name__ == '__main__':
   else:
     # Look for wrappers/cutlery -- don't have access to these right now, so for now, just add an informational page about the different utensils
     # if identified, instruct dispoal of wrappers/cutlery, then
+    condiments = False
     for i in wrappers_cutlery:
-      if ADD_ONS[i][1] != CONTAINERS[highest_probability_id][1] or not (highest_probability_id == -1 and ADD_ONS[i][1] == "trash"):
-        print(f"Throw {ADD_ONS[i][0]} into {ADD_ONS[i][1]}")
+      if (ADD_ONS[i][1] != CONTAINERS[highest_probability_id][1] or not (highest_probability_id == -1 and ADD_ONS[i][1] == "trash")) and not condiments:
+        if i == 0 or i == 1:
+          condiments = True
+          print(f"Throw condiment packets into {ADD_ONS[i][1]}")
+        else:
+          print(f"Throw {ADD_ONS[i][0]} into {ADD_ONS[i][1]}")
+        
     if highest_probability_id == -1:
       print("Throw the rest in the trash")
       sys.exit(0)
