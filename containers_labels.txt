@@ -1,9 +1,0 @@
-0 compostable-cup
-1 condiments-cup
-2 small-waxed-paper-tray
-3 soup-container
-4 takeaway-container
-5 tin-no-lid
-6 tin-with-lid
-7 large-waxed-paper-tray
-8 large-unwaxed-paper-tray

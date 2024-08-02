@@ -49,8 +49,8 @@ def load_labels(filename):
 
 def identify_utensils(image_path):
   image_file = image_path
-  model_file = '../utensils_model.tflite'
-  label_file = '../utensils_labels.txt'
+  model_file = '../models/utensils_model.tflite'
+  label_file = '../models/utensils_labels.txt'
   input_mean = 127.5
   input_std = 127.5
   num_threads = None

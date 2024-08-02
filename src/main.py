@@ -70,12 +70,12 @@ if __name__ == '__main__':
   parser.add_argument(
       '-m',
       '--model_file',
-      default='../containers_model.tflite',
+      default='../models/containers_model.tflite',
       help='.tflite model to be executed')
   parser.add_argument(
       '-l',
       '--label_file',
-      default='../containers_labels.txt',
+      default='../models/containers_labels.txt',
       help='name of file containing labels')
   parser.add_argument(
       '--input_mean',
