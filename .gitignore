@@ -1,0 +1,5 @@
+# hide Google Drive API key
+secret-keys/
+
+# hide pycache files
+*.pyc

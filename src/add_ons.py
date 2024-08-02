@@ -47,7 +47,7 @@ def load_labels(filename):
   with open(filename, 'r') as f:
     return [line.strip() for line in f.readlines()]
 
-def identify_utensils(image_path):
+def identify_utensils(image_path, data):
   image_file = image_path
   model_file = '../models/utensils_model.tflite'
   label_file = '../models/utensils_labels.txt'
@@ -94,6 +94,9 @@ def identify_utensils(image_path):
   labels = load_labels(label_file)
   object_ids = []
   highest_probability_id = -1
+
+  for i in results:
+    data += i + ", "
 
   for i in top_k:
     if floating_model:

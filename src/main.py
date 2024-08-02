@@ -24,7 +24,11 @@ from PIL import Image
 from tflite_runtime.interpreter import Interpreter
 from weight import totalWeight
 from add_ons import identify_utensils
+import re
+from sync import main
 
+data_file = "data-temp.csv"
+temp_file = "/sys/class/thermal/thermal_zone0/temp"
 
 # Define a list of colors for visualization
 COLORS = np.random.randint(0, 255, size=(3, 3), dtype=np.uint8)  # len(classes) --> substitute for size because classes not initialized
@@ -54,11 +58,21 @@ ADD_ONS = [# ['mayo', 'trash', 'plastic', 13.2],
 significant_weight_deviation = 20 # in grams
 identification_threshold = 0.5 # probability
 
-# weigh = hx711(5, 6) # change to actual pins
+data = ""
 
 def load_labels(filename):
   with open(filename, 'r') as f:
     return [line.strip() for line in f.readlines()]
+
+def write_data(data):
+  with open(data_file, "r+") as f:
+    f.seek(0)
+    f.write(re.sub(r"<string>ABC</string>(\s+)<string>(.*)</string>", r"<xyz>ABC</xyz>\1<xyz>\2</xyz>", data))
+    f.truncate()
+
+def measure_temp():
+  with open(temp_file, "r") as f:
+    return float(f.readlines()) 
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
@@ -150,6 +164,9 @@ if __name__ == '__main__':
   output_data = interpreter.get_tensor(output_details[0]['index'])
   results = np.squeeze(output_data)
 
+  for i in results:
+    data += i + ", "
+
   top_k = results.argsort()[-5:][::-1]
   labels = load_labels(args.label_file)
   object_ids = []
@@ -175,11 +192,14 @@ if __name__ == '__main__':
   if len(object_ids) < 1:
     print(f"No object identified with greater than {identification_threshold} probability")
     
-  wrappers_cutlery = identify_utensils(args.image)
+  wrappers_cutlery = identify_utensils(args.image, data)
   weight = CONTAINERS[highest_probability_id][3]  # total weight
   for i in wrappers_cutlery:
     weight += ADD_ONS[i][3]
   print(f"expected weight: {weight}")
+  data += weight + ", " + totalWeight() + ", " + measure_temp
+  write_data(data) # write data to data-temp.csv
+  upload_data() # write data to backup database spreadsheet
 
   # Start processing for most likely container
   if CONTAINERS[highest_probability_id][1] == "compost":
@@ -221,6 +241,6 @@ if __name__ == '__main__':
         print("Recycle")
     else:
       print("Throw all remaining into trash.")
-            
+
 print(f"{totalWeight()}")
 print('time: {:.3f}ms'.format((stop_time - start_time) * 1000))
