@@ -32,7 +32,7 @@ ADD_ONS = [['mayo', 'trash', 'plastic', 13.2],
            # ['one-use-knife', 'trash', 'plastic', '-1'],
            # ['napkin', 'compost, recycling', 'unwaxed-paper', '-1'],
            # ]
-
+data = ""
 # ADD_ONS = [['compostable-fork', 'compost', 'compostable-plastic', '-1'],
 #            ['compostable-spoon', 'compost', 'compostable-plastic', '-1'],
 #            ['one-use-fork', 'trash', 'plastic', '-1'],
@@ -47,10 +47,11 @@ def load_labels(filename):
   with open(filename, 'r') as f:
     return [line.strip() for line in f.readlines()]
 
-def identify_utensils(image_path, data):
+def identify_utensils(image_path):
+  data = ''
   image_file = image_path
-  model_file = '../models/utensils_model.tflite'
-  label_file = '../models/utensils_labels.txt'
+  model_file = '../model/utensils_model.tflite'
+  label_file = '../model/utensils_labels.txt'
   input_mean = 127.5
   input_std = 127.5
   num_threads = None
@@ -96,7 +97,7 @@ def identify_utensils(image_path, data):
   highest_probability_id = -1
 
   for i in results:
-    data += i + ", "
+    data += str(i) + ", "
 
   for i in top_k:
     if floating_model:
@@ -108,4 +109,4 @@ def identify_utensils(image_path, data):
     else:
       print('{:08.6f}: {}'.format(float(results[i] / 255.0), labels[i]))
   
-  return object_ids
+  return object_ids, data

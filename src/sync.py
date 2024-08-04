@@ -8,24 +8,24 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from tinkerforge.ip_connection import IPConnection
 
-GDOCS_OAUTH_JSON = '../secret-keys/trash-project-2024-10b0ff6b629e.json'
-GDOCS_SPREADSHEET_NAME = 'Data Backup'
+GDOCS_OAUTH_JSON = "../secret-keys/trash-project-2024-10b0ff6b629e.json"
+GDOCS_SPREADSHEET_NAME = "Data Backup"
 # FREQUENCY_SECONDS = 30
 # HOST = "localhost"
 # PORT = 4223
 
 def login_open_sheet(oauth_key_file,spreadsheet):
-    try:
-        scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-        credentials = ServiceAccountCredentials.from_json_keyfile_name(oauth_key_file,scope)
-        gc=gspread.authorize(credentials)
-        worksheet=gc.open(spreadsheet).sheet1
-        return worksheet
+    # try:
+    scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(oauth_key_file,scope)
+    gc=gspread.authorize(credentials)
+    worksheet=gc.open(spreadsheet).sheet1
+    return worksheet
 
-    except Exception as ex:
-        print ('Unable to login and get spreadsheet')
-        print('Google sheet login failes with error',ex)
-        sys.exit(1)
+    # except Exception as ex:
+    print ('Unable to login and get spreadsheet')
+    print('Google sheet login failes with error',ex)
+    sys.exit(1)
 
 def upload_data():
     worksheet = None
@@ -49,5 +49,6 @@ def upload_data():
         print('failed')
         worksheet = None
 
-# if __name__ == "__main__":
-#     main() 
+if __name__ == "__main__":
+    print("hello")
+    upload_data() 

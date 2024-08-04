@@ -16,7 +16,7 @@
 
 import argparse
 import time
-import hx711
+# import hx711
 import sys
 
 import numpy as np
@@ -25,7 +25,7 @@ from tflite_runtime.interpreter import Interpreter
 from weight import totalWeight
 from add_ons import identify_utensils
 import re
-from sync import main
+from sync import upload_data
 
 data_file = "data-temp.csv"
 temp_file = "/sys/class/thermal/thermal_zone0/temp"
@@ -72,7 +72,7 @@ def write_data(data):
 
 def measure_temp():
   with open(temp_file, "r") as f:
-    return float(f.readlines()) 
+    return int(f.readlines()[0])/1000 
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
@@ -84,12 +84,12 @@ if __name__ == '__main__':
   parser.add_argument(
       '-m',
       '--model_file',
-      default='../models/containers_model.tflite',
+      default='../model/containers_model.tflite',
       help='.tflite model to be executed')
   parser.add_argument(
       '-l',
       '--label_file',
-      default='../models/containers_labels.txt',
+      default='../model/containers_labels.txt',
       help='name of file containing labels')
   parser.add_argument(
       '--input_mean',
@@ -163,9 +163,10 @@ if __name__ == '__main__':
 
   output_data = interpreter.get_tensor(output_details[0]['index'])
   results = np.squeeze(output_data)
+  
 
   for i in results:
-    data += i + ", "
+    data += str(i) + ", "
 
   top_k = results.argsort()[-5:][::-1]
   labels = load_labels(args.label_file)
@@ -192,12 +193,12 @@ if __name__ == '__main__':
   if len(object_ids) < 1:
     print(f"No object identified with greater than {identification_threshold} probability")
     
-  wrappers_cutlery = identify_utensils(args.image, data)
+  wrappers_cutlery, add_ons_data = identify_utensils(args.image)
   weight = CONTAINERS[highest_probability_id][3]  # total weight
   for i in wrappers_cutlery:
     weight += ADD_ONS[i][3]
   print(f"expected weight: {weight}")
-  data += weight + ", " + totalWeight() + ", " + measure_temp
+  data += add_ons_data + str(weight) + ", " + str(totalWeight()) + ", " + str(measure_temp())
   write_data(data) # write data to data-temp.csv
   upload_data() # write data to backup database spreadsheet
 
