@@ -19,8 +19,6 @@ If starting up in a location with previously unconnected WiFi:
     b. Log in using (Beverly needs to update this section)
     c. Connect the router to the WiFi. (Need to figure out how to this, giiven that our school wifi is now credential-based...)
 
-3. Install [ROS 2](https://docs.ros.org/en/humble/Installation.html) (Humble recommended, but later versions like Iron may also work.)
-
 If starting up in a location with previously connected WiFi:
 1. Ensure your personal computer and the RPi are connected to the same WiFi.
 2. Open your bash shell (WSL for Windows, Terminal for Macbooks) on your personal computer.
