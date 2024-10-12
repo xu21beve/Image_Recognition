@@ -50,5 +50,4 @@ def upload_data():
         worksheet = None
 
 if __name__ == "__main__":
-    print("hello")
     upload_data() 
