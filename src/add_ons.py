@@ -16,7 +16,6 @@
 
 import argparse
 import time
-import hx711
 
 import numpy as np
 from PIL import Image

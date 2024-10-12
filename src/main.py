@@ -171,6 +171,7 @@ if __name__ == '__main__':
   top_k = results.argsort()[-5:][::-1]
   labels = load_labels(args.label_file)
   object_ids = []
+  add_on_ids = []
   highest_probability_id = -1
   
   for i in range(20):
@@ -202,6 +203,9 @@ if __name__ == '__main__':
   write_data(data) # write data to data-temp.csv
   upload_data() # write data to backup database spreadsheet
 
+  # function to look for wrappers/cutlery
+  add_on_ids = identify_add_ons(args.model_file)
+
   # Start processing for most likely container
   if CONTAINERS[highest_probability_id][1] == "compost":
     # function to look for wrappers/cutlery
@@ -212,7 +216,7 @@ if __name__ == '__main__':
     # return "compost"
     print("Compost")
   else:
-    # Look for wrappers/cutlery -- don't have access to these right now, so for now, just add an informational page about the different utensils
+    # Look for wrappers/cutlery
     # if identified, instruct dispoal of wrappers/cutlery, then
     condiments = False
     for i in wrappers_cutlery:

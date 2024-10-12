@@ -3,3 +3,18 @@ secret-keys/
 
 # hide pycache files
 *.pyc
+
+# random files for me lol
+parse.py
+multicopter-data.csv
+jacob.py
+.gitignore
+data-velocity.csv
+data.csv
+training/augmented-model.h5
+
+*.png
+*.jpg
+*.jpeg
+*.PNG 
+*.JPG 
