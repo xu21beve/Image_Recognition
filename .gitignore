@@ -12,6 +12,7 @@ jacob.py
 data-velocity.csv
 data.csv
 training/augmented-model.h5
+image.jpg
 
 *.png
 *.jpg
